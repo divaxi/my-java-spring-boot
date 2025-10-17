@@ -1,0 +1,70 @@
+app:
+  name: Spring Boot App
+  description: An example Spring Boot app
+  version: 1.0
+  secret:
+
+springdoc:
+  show-actuator: true
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /docs.json
+
+jwt:
+  secretKey: secret
+  refreshSecretKey: refresh
+  issuer: www.farukgenc.com
+  expirationMinute: 10
+  refreshExpirationMinute: 10080  # 60*24*7 
+
+swagger:
+  contact-name: Faruk Genc
+  contact-mail: omer@farukgenc.com
+  contact-url: https://farukgenc.com
+  app-name: Spring Boot Boilerplate Project
+  app-description: "Spring Boot Boilerplate is a starter kit. This project includes : Spring Boot(3.5.6), Spring Data JPA, Spring Validation, Spring Security + JWT Token, PostgreSQL, Mapstruct, Lombok, Swagger (Open API)"
+  app-version: 3.5.6
+  app-license-url: https://www.apache.org/licenses/LICENSE-2.0.html
+  app-license: Apache 2.0
+
+spring:
+  application:
+    name: MyApp
+  profiles:
+    active: dev
+  security:
+    user:
+      name: admin
+      password: admin123
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    producer:
+      batch-size: 16
+      retries: 0
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      auto-offset-reset: latest
+      enable-auto-commit: true
+      auto-commit-interval: 100
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: test-consumer-group
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+---
+spring:
+  config:
+    activate:
+      on-profile: test
