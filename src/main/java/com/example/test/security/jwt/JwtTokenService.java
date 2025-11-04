@@ -58,7 +58,7 @@ public class JwtTokenService {
 
 		log.info("{} has successfully logged in!", user.getUsername());
 
-		return new LoginResponse(token,refreshToken);
+		return new LoginResponse(token,refreshToken, user.getUsername(),user.getEmail());
 	}
 
 	public RefreshResponse getRefreshResponse (HttpServletRequest request) {

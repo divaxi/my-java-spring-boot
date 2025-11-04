@@ -1,12 +1,15 @@
 package com.example.test.controller;
 
 import java.time.Duration;
-import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.test.dto.MonitoringDto;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,9 +28,17 @@ public class WebFluxController {
                    .delayElements(Duration.ofSeconds(1)); // Simulate stream
     }
 
-    @GetMapping(value = "/stream", produces = "text/event-stream")
-    public Flux<String> streamData() {
-        return Flux.interval(Duration.ofSeconds(1))
-                   .map(tick -> "Current time: " + LocalTime.now());
-    }
+@GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+public Flux<ServerSentEvent<MonitoringDto>> stream() {
+    return Flux.interval(Duration.ofSeconds(1))
+        .map(seq -> {
+            MonitoringDto data = new MonitoringDto(Math.round(Math.random() * 1000) / 10.0, Math.round(Math.random() * 1000) / 10.0);
+            return ServerSentEvent.<MonitoringDto>builder()
+                    .id(String.valueOf(seq))
+                    .event("monitoringEvent")
+                    .data(data)
+                    .build();
+        });
+}
+
 }
